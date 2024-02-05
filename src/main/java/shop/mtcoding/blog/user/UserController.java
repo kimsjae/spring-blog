@@ -25,6 +25,10 @@ public class UserController {
      */
     public String login(UserRequest.loginDTO requestDTO) {
         System.out.println(requestDTO);
+
+        if (requestDTO.getUsername().length() < 3) {
+            return "error/400"; // ViewResolver 설정이 되어 있음.
+        }
         return null;
     }
 
