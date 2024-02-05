@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -24,8 +25,11 @@ public class BoardController {
         return "board/saveForm";
     }
 
-    @GetMapping("/board/1")
-    public String detail() {
+    @GetMapping("/board/{id}")
+    public String detail(@PathVariable int id) { // 경로 변수
+        //System.out.println("id : " + id);
+        BoardResponse.DetailDTO detailDTO = boardRepository.findById(id);
+
         return "board/detail";
     }
 }
