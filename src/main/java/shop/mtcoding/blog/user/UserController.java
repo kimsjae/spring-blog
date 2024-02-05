@@ -18,6 +18,16 @@ public class UserController {
         return "redirect:/loginForm";
     }
 
+    @PostMapping("/login")
+    /**
+     * 왜 조회인데 Post ?
+     * 민감한 정보는 body로 보내기 때문에 로그인만 예외로 select인데 Post 사용
+     */
+    public String login(UserRequest.loginDTO requestDTO) {
+        System.out.println(requestDTO);
+        return null;
+    }
+
     @GetMapping("/joinForm")
     public String joinForm() {
         return "user/joinForm";
