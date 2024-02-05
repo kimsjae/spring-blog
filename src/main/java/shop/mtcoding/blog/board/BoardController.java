@@ -26,10 +26,10 @@ public class BoardController {
     }
 
     @GetMapping("/board/{id}")
-    public String detail(@PathVariable int id) { // 경로 변수
+    public String detail(@PathVariable int id, HttpServletRequest request) { // 경로 변수
         //System.out.println("id : " + id);
         BoardResponse.DetailDTO detailDTO = boardRepository.findById(id);
-
+        request.setAttribute("board", detailDTO);
         return "board/detail";
     }
 }
