@@ -1,5 +1,7 @@
 package shop.mtcoding.blog.user;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class UserController {
     // 자바는 final 변수는 반드시 초기화가 되어야 함.
     private final UserRepository userRepository;
+    private final HttpSession session;
 
     @PostMapping("/join")
     public String join(UserRequest.JoinDTO requestDTO) {
@@ -23,7 +26,7 @@ public class UserController {
      * 왜 조회인데 Post ?
      * 민감한 정보는 body로 보내기 때문에 로그인만 예외로 select인데 Post 사용
      */
-    public String login(UserRequest.LoginDTO requestDTO) {
+    public String login(UserRequest.LoginDTO requestDTO, HttpServletRequest request) {
         System.out.println(requestDTO);
 
         if (requestDTO.getUsername().length() < 3) {
@@ -32,12 +35,12 @@ public class UserController {
 
         User user = userRepository.findByUsernameAndPassword(requestDTO);
 
-        if (user == null) {
+        if (user == null) { // 조회 실패 (401)
             return "error/401";
-        } else {
-
+        } else { // 조회 성공 (인증됨)
+            session.setAttribute("sessionUser", user); // 락카에 담음 (stateFul)
         }
-        return null;
+        return "redirect:/"; // 컨트롤러가 존재하면 무조건 redirect
     }
 
     @GetMapping("/joinForm")
