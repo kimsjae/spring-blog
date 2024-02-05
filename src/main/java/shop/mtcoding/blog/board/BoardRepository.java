@@ -35,6 +35,14 @@ public class BoardRepository {
         System.out.println("content : "+content);
         System.out.println("userId : "+userId);
         System.out.println("username : "+username);
-        return null;
+
+        BoardResponse.DetailDTO responseDTO = new BoardResponse.DetailDTO();
+        responseDTO.setId(id);
+        responseDTO.setTitle(title);
+        responseDTO.setContent(content);
+        responseDTO.setUserId(userId);
+        responseDTO.setUsername(username);
+
+        return responseDTO;
     }
 }
