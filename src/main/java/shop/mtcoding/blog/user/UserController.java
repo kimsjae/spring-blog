@@ -29,6 +29,14 @@ public class UserController {
         if (requestDTO.getUsername().length() < 3) {
             return "error/400"; // ViewResolver 설정이 되어 있음.
         }
+
+        User user = userRepository.findByUsernameAndPassword(requestDTO);
+
+        if (user == null) {
+            return "error/401";
+        } else {
+
+        }
         return null;
     }
 
