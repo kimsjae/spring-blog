@@ -12,7 +12,7 @@ public class UserRequest {
     }
 
     @Data
-    public static class loginDTO {
+    public static class LoginDTO {
         private String username;
         private String password;
     }

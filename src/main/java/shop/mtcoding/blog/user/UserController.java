@@ -23,7 +23,7 @@ public class UserController {
      * 왜 조회인데 Post ?
      * 민감한 정보는 body로 보내기 때문에 로그인만 예외로 select인데 Post 사용
      */
-    public String login(UserRequest.loginDTO requestDTO) {
+    public String login(UserRequest.LoginDTO requestDTO) {
         System.out.println(requestDTO);
 
         if (requestDTO.getUsername().length() < 3) {
