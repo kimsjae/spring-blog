@@ -14,6 +14,7 @@ public class UserController {
     @PostMapping("/join")
     public String join(UserRequest.JoinDTO requestDTO) {
         System.out.println(requestDTO);
+        userRepository.save(requestDTO); // 모델에 위임하기
         return "redirect:/loginForm";
     }
 
