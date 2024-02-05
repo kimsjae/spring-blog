@@ -8,6 +8,10 @@ server:
   port: 8080
 
 spring:
+  sql:
+    init:
+      data-locations:
+      - classpath:db/data.sql # 스프링 실행할 때 초기화하는 설정법
   mustache:
     servlet:
       expose-session-attributes: true
@@ -27,3 +31,4 @@ spring:
     properties:
       hibernate:
         format_sql: true
+    defer-datasource-initialization: true # ddl-auto가 된 후에 실행되게 하는 설정
