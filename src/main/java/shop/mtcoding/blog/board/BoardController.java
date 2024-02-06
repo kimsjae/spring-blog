@@ -48,6 +48,10 @@ public class BoardController {
     @PostMapping("/board/save")
     public String save(BoardRequest.SaveDTO requestDTO) {
         System.out.println(requestDTO);
+
+        if (requestDTO.getTitle().length() > 30) {
+            return "error/400"; // BadRequest
+        }
         return "redirect:/";
     }
 
