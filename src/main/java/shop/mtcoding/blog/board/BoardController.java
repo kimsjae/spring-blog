@@ -46,11 +46,13 @@ public class BoardController {
     }
 
     @PostMapping("/board/save")
-    public String save(BoardRequest.SaveDTO requestDTO) {
+    public String save(BoardRequest.SaveDTO requestDTO, HttpServletRequest request) {
         System.out.println(requestDTO);
 
         if (requestDTO.getTitle().length() > 30) {
-            return "error/400"; // BadRequest
+            request.setAttribute("msg", "title의 길이가 30자를 초과해서는 안 돼요.");
+            request.setAttribute("status", 400);
+            return "error/40x"; // BadRequest
         }
         return "redirect:/";
     }
