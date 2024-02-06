@@ -47,6 +47,13 @@ public class BoardController {
 
     @PostMapping("/board/save")
     public String save(BoardRequest.SaveDTO requestDTO, HttpServletRequest request) {
+        // 1. 인증 체크
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) {
+            return "redirect:/loginForm";
+        }
+
+        // 2. 바디 데이터 확인 및 유효성 검사
         System.out.println(requestDTO);
 
         if (requestDTO.getTitle().length() > 30) {
@@ -54,6 +61,11 @@ public class BoardController {
             request.setAttribute("status", 400);
             return "error/40x"; // BadRequest
         }
+
+        // 3. 모델 위임
+        // insert into board_tb(title, content, user_id, created_at) values(?, ?, ?, now());
+        boardRepository.save(requestDTO, sessionUser.getId());
+
         return "redirect:/";
     }
 
