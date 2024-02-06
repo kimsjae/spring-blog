@@ -46,8 +46,8 @@ public class BoardController {
     }
 
     @PostMapping("/board/save")
-    public String save() {
-        
+    public String save(BoardRequest.SaveDTO requestDTO) {
+        System.out.println(requestDTO);
         return "redirect:/";
     }
 
