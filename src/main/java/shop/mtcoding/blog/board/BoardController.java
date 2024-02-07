@@ -18,6 +18,12 @@ public class BoardController {
     private final BoardRepository boardRepository;
     private final HttpSession session;
 
+    @PostMapping("/board/{id}/update")
+    public String update(@PathVariable int id, ) {
+
+    }
+
+
     // 책임: 데이터 조회해서 게시글 수정 페이지에 뿌림
     @GetMapping("/board/{id}/updateForm")
     public String updateForm(@PathVariable int id, HttpServletRequest request) {
