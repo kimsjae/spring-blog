@@ -18,6 +18,30 @@ public class BoardController {
     private final BoardRepository boardRepository;
     private final HttpSession session;
 
+    // 책임: 데이터 조회해서 게시글 수정 페이지에 뿌림
+    @GetMapping("/board/{id}/updateForm")
+    public String updateForm(@PathVariable int id, HttpServletRequest request) {
+        // 인증 체크
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) {
+            return "redirect:/loginForm";
+        }
+
+        // 모델 위임 필요 (id로 board 조회) - 게시글 수정화면에 원래 글이 있어야 하기 때문
+        Board board = boardRepository.findById(id);
+
+        // 권한 체크 (권한 체크 전에 모델위임이 먼저 필요)
+        if (board.getUserId() != sessionUser.getId()) {
+            return "error/403";
+        }
+
+        // 가방에 담기
+        request.setAttribute("board", board);
+
+        return "board/updateForm";
+    }
+
+
     @PostMapping("/board/{id}/delete")
     public String delete(@PathVariable int id, HttpServletRequest request) {
         // 1. 인증 안 되면 나가
