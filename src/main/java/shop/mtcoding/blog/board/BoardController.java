@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import shop.mtcoding.blog.user.User;
 import shop.mtcoding.blog.user.UserRequest;
 
@@ -19,8 +20,25 @@ public class BoardController {
     private final HttpSession session;
 
     @PostMapping("/board/{id}/update")
-    public String update(@PathVariable int id, ) {
+    public String update(@PathVariable int id, BoardRequest.UpdateDTO requestDTO) {
+        // 부가 로직 - 인증체크, 권한체크
+        // 1. 인증 체크 - 로그인 돼 있는 지
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) {
+            return "redirect:/loginForm";
+        }
 
+        // 2. 권한 체크 - 너가 맞는 지
+        Board board = boardRepository.findById(id);
+
+        if (board.getUserId() != sessionUser.getId()) {
+            return "error/403";
+        }
+
+        // 3. 핵심 로직
+        boardRepository.update(requestDTO, id);
+
+        return "redirect:/board/" + id;
     }
 
 
