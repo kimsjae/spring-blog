@@ -21,27 +21,27 @@ public class UserController {
         return "redirect:/loginForm";
     }
 
-    @PostMapping("/login")
-    /**
-     * 왜 조회인데 Post ?
-     * 민감한 정보는 body로 보내기 때문에 로그인만 예외로 select인데 Post 사용
-     */
-    public String login(UserRequest.LoginDTO requestDTO) {
-        System.out.println(requestDTO);
-
-        if (requestDTO.getUsername().length() < 3) {
-            return "error/400"; // ViewResolver 설정이 되어 있음.
-        }
-
-        User user = userRepository.findByUsernameAndPassword(requestDTO);
-
-        if (user == null) { // 조회 실패 (401)
-            return "error/401";
-        } else { // 조회 성공 (인증됨)
-            session.setAttribute("sessionUser", user); // 락카에 담음 (stateFul)
-        }
-        return "redirect:/"; // 컨트롤러가 존재하면 무조건 redirect
-    }
+//    @PostMapping("/login")
+//    /**
+//     * 왜 조회인데 Post ?
+//     * 민감한 정보는 body로 보내기 때문에 로그인만 예외로 select인데 Post 사용
+//     */
+//    public String login(UserRequest.LoginDTO requestDTO) {
+//        System.out.println(requestDTO);
+//
+//        if (requestDTO.getUsername().length() < 3) {
+//            return "error/400"; // ViewResolver 설정이 되어 있음.
+//        }
+//
+//        User user = userRepository.findByUsernameAndPassword(requestDTO);
+//
+//        if (user == null) { // 조회 실패 (401)
+//            return "error/401";
+//        } else { // 조회 성공 (인증됨)
+//            session.setAttribute("sessionUser", user); // 락카에 담음 (stateFul)
+//        }
+//        return "redirect:/"; // 컨트롤러가 존재하면 무조건 redirect
+//    }
 
     @GetMapping("/joinForm")
     public String joinForm() {

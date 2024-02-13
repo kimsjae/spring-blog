@@ -32,7 +32,24 @@ public class UserRepository {
         Query query = em.createNativeQuery("select * from user_tb where username=? and password=?", User.class); // User.class를 적을 수 있는 이유는 User 엔티티가 구현되어 있기 때문이다. 이렇게 되면 자동으로 User클래스에 Table 데이터를 파싱해서 담아준다.
         query.setParameter(1, requestDTO.getUsername());
         query.setParameter(2, requestDTO.getPassword());
-        User user = (User) query.getSingleResult();
-        return user;
+
+        try {
+            User user = (User) query.getSingleResult();
+            return user;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public User findByUsername(String username) {
+        Query query = em.createNativeQuery("select * from user_tb where username=?", User.class); // User.class를 적을 수 있는 이유는 User 엔티티가 구현되어 있기 때문이다. 이렇게 되면 자동으로 User클래스에 Table 데이터를 파싱해서 담아준다.
+        query.setParameter(1, username);
+
+        try {
+            User user = (User) query.getSingleResult();
+            return user;
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
