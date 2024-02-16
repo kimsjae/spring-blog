@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import shop.mtcoding.blog.reply.ReplyRepository;
 import shop.mtcoding.blog.user.User;
 import shop.mtcoding.blog.user.UserRequest;
 
@@ -18,6 +19,7 @@ import java.util.List;
 public class BoardController {
     private final BoardRepository boardRepository;
     private final HttpSession session;
+    private final ReplyRepository replyRepository;
 
     @PostMapping("/board/{id}/update")
     public String update(@PathVariable int id, BoardRequest.UpdateDTO requestDTO) {
@@ -109,20 +111,18 @@ public class BoardController {
 
     @GetMapping("/board/{id}")
     public String detail(@PathVariable int id, HttpServletRequest request) { // 경로 변수
-        // 1. 모델 진입 - 상세보기 데이터 가져오기
-        BoardResponse.DetailDTO detailDTO = boardRepository.findByIdWithUser(id);
-
-        // 2. 페이지 주인 여부 체크 (board의 userId와 sessionUser의 id를 비교)
-        boolean pageOwner = false;
-
         User sessionUser = (User) session.getAttribute("sessionUser");
 
-        if (sessionUser != null && detailDTO.getUserId() == sessionUser.getId()) {
-            pageOwner = true;
-        }
+        BoardResponse.DetailDTO boardDTO = boardRepository.findByIdWithUser(id);
 
-        request.setAttribute("board", detailDTO);
-        request.setAttribute("pageOwner", pageOwner);
+        boardDTO.isBoardOwner(sessionUser);
+
+        List<BoardResponse.ReplyDTO> replyDTOList = replyRepository.findByBoardId(id, sessionUser);
+
+
+        request.setAttribute("board", boardDTO);
+        request.setAttribute("replyList", replyDTOList);
+        //request.setAttribute("pageOwner", pageOwner);
         return "board/detail";
     }
 

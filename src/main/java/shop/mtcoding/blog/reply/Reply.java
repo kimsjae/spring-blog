@@ -11,9 +11,9 @@ import java.time.LocalDateTime;
 public class Reply {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private String comment;
-    private int userId;
-    private int boardId;
+    private Integer userId;
+    private Integer boardId;
     private LocalDateTime createdAt;
 }
