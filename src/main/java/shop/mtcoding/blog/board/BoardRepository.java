@@ -13,6 +13,12 @@ import java.util.List;
 public class BoardRepository {
     private final EntityManager em;
 
+    public Long count() {
+        Query query = em.createNativeQuery("select count(*) from board_tb");
+        return (Long) query.getSingleResult();
+    }
+
+
     @Transactional
     public void delete(int id) {
         Query query = em.createNativeQuery("delete from board_tb where id = ?");
@@ -30,8 +36,9 @@ public class BoardRepository {
 
 
 
-    public List<Board> findAll() {
-        Query query = em.createNativeQuery("select * from board_tb order by id desc", Board.class);
+    public List<Board> findAll(Integer page) {
+        Query query = em.createNativeQuery("select * from board_tb order by id desc limit ?,3", Board.class); // 시작번호, 개수
+        query.setParameter(1, page*3);
         return query.getResultList();
     }
 
