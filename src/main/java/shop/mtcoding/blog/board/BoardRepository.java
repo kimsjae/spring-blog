@@ -18,6 +18,13 @@ public class BoardRepository {
         return (Long) query.getSingleResult();
     }
 
+    public Long count(String keyword) {
+        Query query = em.createNativeQuery("select count(*) from board_tb where title like ?");
+        query.setParameter(1, "%"+keyword+"%");
+        return (Long) query.getSingleResult();
+    }
+
+
 
     @Transactional
     public void delete(int id) {
@@ -41,6 +48,14 @@ public class BoardRepository {
         query.setParameter(1, page*3);
         return query.getResultList();
     }
+
+    public List<Board> findAll(Integer page, String keyword) {
+        Query query = em.createNativeQuery("select * from board_tb where title like ? order by id desc limit ?,3", Board.class); // 시작번호, 개수
+        query.setParameter(1, "%"+keyword+"%");
+        query.setParameter(2, page*3);
+        return query.getResultList();
+    }
+
 
     public BoardResponse.DetailDTO findByIdWithUser(int idx) {
         Query query = em.createNativeQuery("select b.id, b.title, b.content, b.user_id, u.username from board_tb b inner join user_tb u on b.user_id = u.id where b.id = ?");
